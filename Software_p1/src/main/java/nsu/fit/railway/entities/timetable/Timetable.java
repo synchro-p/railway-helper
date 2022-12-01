@@ -1,4 +1,6 @@
-package nsu.fit.railway.entities;
+package nsu.fit.railway.entities.timetable;
+
+import nsu.fit.railway.entities.timetable.TimetableEntry;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package nsu.fit.railway.entities;
+package nsu.fit.railway.entities.topology;
 
 public class Signal extends ControlElement {
     private final SignalInfo signalInfo;

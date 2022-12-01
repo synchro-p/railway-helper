@@ -1,6 +1,6 @@
-package nsu.fit.railway.entities;
+package nsu.fit.railway.entities.topology;
 
-public class TrackInfo {
+public class TrackInfo extends ElementInfo{
 
     private final Integer length;
 

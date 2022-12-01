@@ -1,4 +1,4 @@
-package nsu.fit.railway.entities;
+package nsu.fit.railway.entities.topology;
 
 import java.util.List;
 
