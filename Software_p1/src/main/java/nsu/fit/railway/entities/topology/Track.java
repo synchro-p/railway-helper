@@ -4,7 +4,7 @@ import nsu.fit.railway.entities.timetable.Type;
 
 import java.util.List;
 
-public class Track {
+public class Track extends ElementState {
 
     private final TrackInfo trackInfo;
     private List<Type> canServe;
