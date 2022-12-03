@@ -2,7 +2,7 @@ package nsu.fit.railway.entities.topology;
 
 import java.util.List;
 
-public class SwitchInfo extends ElementInfo{
+public class SwitchInfo{
 
     private final Track trackFrom;
     private final List<Track> tracksTo;
