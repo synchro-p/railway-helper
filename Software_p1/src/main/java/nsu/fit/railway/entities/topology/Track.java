@@ -5,14 +5,13 @@ import nsu.fit.railway.entities.timetable.Type;
 import java.util.List;
 
 public class Track extends ElementState {
-
     private final TrackInfo trackInfo;
     private List<Type> canServe;
     private final List<Type> canServeInitial;
     private boolean isActive;
 
-    public Track(Integer length, List<Type> canServe, boolean isActive) {
-        this.trackInfo = new TrackInfo(length);
+    public Track(TrackInfo trackInfo, List<Type> canServe, boolean isActive) {
+        this.trackInfo = trackInfo;
         this.canServe = canServe;
         this.canServeInitial = canServe;
         this.isActive = isActive;
