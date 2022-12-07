@@ -1,31 +1,23 @@
 package nsu.fit.railway.entities.topology;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Topology {
 
-    private final Map<Integer, Node> nodes;
+    private final Set<Node> nodes;
 
-    private final Map<Integer, Track> tracks;
+    private final Set<Track> tracks;
 
-    public Topology(List<Node> nodes, List<Track> tracks) {
-        this.nodes = new HashMap<>();
-        this.tracks = new HashMap<>();
-        for (Node n : nodes) {
-            this.nodes.put(n.getId(), n);
-        }
-        for (Track t : tracks) {
-            this.tracks.put(t.getTrackInfo().getId(), t);
-        }
+    public Topology(Set<Node> nodes, Set<Track> tracks) {
+        this.nodes = nodes;
+        this.tracks = tracks;
     }
 
-    public Map<Integer, Node> getNodes() {
+    public Set<Node> getNodes() {
         return nodes;
     }
 
-    public Map<Integer, Track> getTracks() {
+    public Set<Track> getTracks() {
         return tracks;
     }
 }
