@@ -1,18 +1,18 @@
 package nsu.fit.railway.entities.event;
 
-import nsu.fit.railway.entities.topology.ElementState;
+import java.util.function.Consumer;
 
-public class StateChange extends Event{
+public class StateChange<T> extends Event{
 
-    private final ChangeFunction function;
-    private final ElementState state;
+    private final T changedElement;
+    private final Consumer<T> changeFunction;
 
-    public StateChange(ChangeFunction function, ElementState state) {
-        this.function = function;
-        this.state = state;
+    public StateChange(Consumer<T> changeFunction, T changedElement) {
+        this.changedElement = changedElement;
+        this.changeFunction = changeFunction;
     }
 
     public void apply() {
-        function.apply(state);
+        changeFunction.accept(changedElement);
     }
 }
