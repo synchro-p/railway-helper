@@ -3,7 +3,6 @@ package nsu.fit.railway.entities.topology;
 import java.util.List;
 
 public class Switch extends ControlElement {
-    //TODO create checks for adequacy for tracks
     private final SwitchInfo switchInfo;
     private Track currentTo;
 

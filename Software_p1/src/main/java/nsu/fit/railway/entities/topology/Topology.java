@@ -1,23 +1,23 @@
 package nsu.fit.railway.entities.topology;
 
-import nsu.fit.railway.entities.topology.Node;
-
-import java.util.List;
+import java.util.*;
 
 public class Topology {
 
-    private List<Node> nodes;
+    private final Set<Node> nodes;
 
-    public Topology(List<Node> nodes) {
+    private final Set<Track> tracks;
+
+    public Topology(Set<Node> nodes, Set<Track> tracks) {
         this.nodes = nodes;
+        this.tracks = tracks;
     }
 
-
-    public List<Node> getNodes() {
+    public Set<Node> getNodes() {
         return nodes;
     }
 
-    public void setNodes(List<Node> nodes) {
-        this.nodes = nodes;
+    public Set<Track> getTracks() {
+        return tracks;
     }
 }

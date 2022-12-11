@@ -1,17 +1,23 @@
 package nsu.fit.railway.entities.topology;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Node {
-
+    private final Integer id;
     private final List<ControlElement> associated;
-    private final List<Track> tracks;
+    private Set<Track> inTracks;
+    private Set<Track> outTracks;
     private final boolean isInput;
     private final boolean isOutput;
 
-    public Node(List<ControlElement> associated, List<Track> tracks, boolean isInput, boolean isOutput) {
+    public Node(Integer id, List<ControlElement> associated, boolean isInput, boolean isOutput) {
+        this.id = id;
         this.associated = associated;
-        this.tracks = tracks;
+        this.inTracks = new HashSet<>();
+        this.outTracks = new HashSet<>();
         this.isInput = isInput;
         this.isOutput = isOutput;
     }
@@ -21,15 +27,31 @@ public class Node {
         return associated;
     }
 
-    public List<Track> getTracks() {
-        return tracks;
-    }
-
     public boolean isInput() {
         return isInput;
     }
 
     public boolean isOutput() {
         return isOutput;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Set<Track> getInTracks() {
+        return inTracks;
+    }
+
+    public void setInTracks(Set<Track> inTracks) {
+        this.inTracks = inTracks;
+    }
+
+    public Set<Track> getOutTracks() {
+        return outTracks;
+    }
+
+    public void setOutTracks(Set<Track> outTracks) {
+        this.outTracks = outTracks;
     }
 }

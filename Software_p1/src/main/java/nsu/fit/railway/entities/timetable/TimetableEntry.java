@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TimetableEntry {
-    //TODO Status in scheme???
     private LocalDateTime arrivalIntervalStart;
     private LocalDateTime arrivalIntervalFinish;
     private Node inputNode;
