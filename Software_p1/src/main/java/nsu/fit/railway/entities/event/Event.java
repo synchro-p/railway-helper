@@ -1,4 +1,5 @@
 package nsu.fit.railway.entities.event;
 
-public class Event {
+public abstract class Event {
+    public abstract void apply();
 }

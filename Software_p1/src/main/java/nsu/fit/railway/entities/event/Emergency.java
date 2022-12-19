@@ -11,4 +11,8 @@ public class Emergency extends Event {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public void apply() {
+        //TODO default realisation - give user a message
+    }
 }

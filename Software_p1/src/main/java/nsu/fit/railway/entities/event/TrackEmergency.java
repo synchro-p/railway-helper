@@ -2,7 +2,7 @@ package nsu.fit.railway.entities.event;
 
 import nsu.fit.railway.entities.topology.Track;
 
-public class TrackEmergency {
+public class TrackEmergency extends Emergency {
 
     private final Track brokenTrack;
 
