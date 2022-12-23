@@ -2,6 +2,7 @@ package nsu.fit.railway.control;
 
 import nsu.fit.railway.entities.event.EventQueue;
 import nsu.fit.railway.entities.timetable.Timetable;
+import nsu.fit.railway.entities.timetable.TimetableEntry;
 import nsu.fit.railway.entities.topology.Topology;
 
 import java.time.LocalDateTime;
@@ -26,5 +27,20 @@ public class ViewController {
             LocalDateTime timestamp = processor.processEvent(events.poll());
 //            SimulationGUI.changeView(Topology, Datetime);
         }
+    }
+
+    public void addTimetableEntry(TimetableEntry entry) {
+        this.timetable.addEntry(entry);
+        //update GUI
+    }
+
+    public void removeTimetableEntry(Integer id) {
+        this.timetable.removeEntry(id);
+        //update GUI
+    }
+
+    public void editTimetableEntry(Integer id, TimetableEntry newEntry) {
+        this.timetable.editEntry(id, newEntry);
+        //update GUI
     }
 }

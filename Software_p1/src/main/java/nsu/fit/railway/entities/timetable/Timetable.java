@@ -20,4 +20,16 @@ public class Timetable {
     public void setEntries(List<TimetableEntry> entries) {
         this.entries = entries;
     }
+
+    public void addEntry(TimetableEntry entry) {
+        entries.add(entry);
+    }
+
+    public void removeEntry(Integer id) {
+        entries.set(id, null);
+    }
+
+    public void editEntry(Integer id, TimetableEntry newEntry) {
+        entries.set(id, newEntry);
+    }
 }

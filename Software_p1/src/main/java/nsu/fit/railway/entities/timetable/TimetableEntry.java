@@ -13,7 +13,6 @@ public class TimetableEntry {
     private Duration stationingTime;
     private Integer length;
     private Type type;
-    private Long id;
 
 
     public LocalDateTime getArrivalIntervalStart() {
@@ -70,13 +69,5 @@ public class TimetableEntry {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }
