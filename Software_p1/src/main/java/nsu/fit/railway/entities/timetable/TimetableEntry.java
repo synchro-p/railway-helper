@@ -1,6 +1,6 @@
 package nsu.fit.railway.entities.timetable;
 
-import nsu.fit.railway.entities.topology.Node;
+import nsu.fit.railway.entities.topology.TopologyNode;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class TimetableEntry {
     private LocalDateTime arrivalIntervalStart;
     private LocalDateTime arrivalIntervalFinish;
-    private Node inputNode;
-    private Node outputNode;
+    private TopologyNode inputNode;
+    private TopologyNode outputNode;
     private Duration stationingTime;
     private Integer length;
     private Type type;
@@ -32,19 +32,19 @@ public class TimetableEntry {
         this.arrivalIntervalFinish = arrivalIntervalFinish;
     }
 
-    public Node getInputNode() {
+    public TopologyNode getInputNode() {
         return inputNode;
     }
 
-    public void setInputNode(Node inputNode) {
+    public void setInputNode(TopologyNode inputNode) {
         this.inputNode = inputNode;
     }
 
-    public Node getOutputNode() {
+    public TopologyNode getOutputNode() {
         return outputNode;
     }
 
-    public void setOutputNode(Node outputNode) {
+    public void setOutputNode(TopologyNode outputNode) {
         this.outputNode = outputNode;
     }
 

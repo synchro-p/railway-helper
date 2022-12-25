@@ -9,8 +9,8 @@ public class Track {
 
     private final TrackInfo trackInfo;
     private List<Type> canServe;
-    private Node startNode;
-    private Node finishNode;
+    private TopologyNode startNode;
+    private TopologyNode finishNode;
     private final List<Type> canServeInitial;
     private boolean isActive;
 
@@ -48,19 +48,19 @@ public class Track {
         return trackInfo;
     }
 
-    public Node getStartNode() {
+    public TopologyNode getStartNode() {
         return startNode;
     }
 
-    public void setStartNode(Node startNode) {
+    public void setStartNode(TopologyNode startNode) {
         this.startNode = startNode;
     }
 
-    public Node getFinishNode() {
+    public TopologyNode getFinishNode() {
         return finishNode;
     }
 
-    public void setFinishNode(Node finishNode) {
+    public void setFinishNode(TopologyNode finishNode) {
         this.finishNode = finishNode;
     }
 }

@@ -1,17 +1,17 @@
 package nsu.fit.railway.entities.event;
 
-import nsu.fit.railway.entities.topology.Node;
+import nsu.fit.railway.entities.topology.TopologyNode;
 
 public class SwitchEmergency extends Emergency {
 
-    private final Node nodeWithBrokenSwitch;
+    private final TopologyNode nodeWithBrokenSwitch;
 
-    public SwitchEmergency(Node node) {
+    public SwitchEmergency(TopologyNode node) {
         nodeWithBrokenSwitch = node;
     }
 
 
-    public Node getNodeWithBrokenSwitch() {
+    public TopologyNode getNodeWithBrokenSwitch() {
         return nodeWithBrokenSwitch;
     }
 }

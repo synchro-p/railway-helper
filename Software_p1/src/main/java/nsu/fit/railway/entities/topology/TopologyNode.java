@@ -1,11 +1,10 @@
 package nsu.fit.railway.entities.topology;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Node {
+public class TopologyNode {
     private final Integer id;
     private final List<ControlElement> associated;
     private Set<Track> inTracks;
@@ -13,7 +12,7 @@ public class Node {
     private final boolean isInput;
     private final boolean isOutput;
 
-    public Node(Integer id, List<ControlElement> associated, boolean isInput, boolean isOutput) {
+    public TopologyNode(Integer id, List<ControlElement> associated, boolean isInput, boolean isOutput) {
         this.id = id;
         this.associated = associated;
         this.inTracks = new HashSet<>();
