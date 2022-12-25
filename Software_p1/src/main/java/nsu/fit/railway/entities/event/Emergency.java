@@ -1,6 +1,9 @@
 package nsu.fit.railway.entities.event;
 
-public class Emergency extends Event {
+import nsu.fit.railway.entities.timetable.Timetable;
+import nsu.fit.railway.entities.topology.Topology;
+
+public abstract class Emergency extends Event {
 
     private String message = "";
 
@@ -12,7 +15,5 @@ public class Emergency extends Event {
         this.message = message;
     }
 
-    public void apply() {
-        //TODO default realisation - give user a message
-    }
+    public abstract void handle(Timetable timetable, Topology topology);
 }
