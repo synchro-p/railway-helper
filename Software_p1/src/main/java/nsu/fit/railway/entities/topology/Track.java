@@ -1,5 +1,6 @@
 package nsu.fit.railway.entities.topology;
 
+import nsu.fit.railway.entities.timetable.Train;
 import nsu.fit.railway.entities.timetable.Type;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Track {
     private Node finishNode;
     private final List<Type> canServeInitial;
     private boolean isActive;
+    private Train currentTrain;
 
     public Track(TrackInfo trackInfo, List<Type> canServe, boolean isActive) {
         this.trackInfo = trackInfo;
@@ -34,7 +36,6 @@ public class Track {
     public void restoreCanServe() {
         canServe = canServeInitial;
     }
-
 
     public boolean isActive() {
         return isActive;
@@ -62,5 +63,21 @@ public class Track {
 
     public void setFinishNode(Node finishNode) {
         this.finishNode = finishNode;
+    }
+
+    public Train getCurrentTrain() {
+        return currentTrain;
+    }
+
+    public void setCurrentTrain(Train currentTrain) {
+        this.currentTrain = currentTrain;
+    }
+
+    public boolean isOccupied() {
+        return this.currentTrain != null;
+    }
+
+    public void freeTrack() {
+        this.currentTrain = null;
     }
 }

@@ -7,11 +7,17 @@ import nsu.fit.railway.entities.topology.Track;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackEmergency {
+public class TrackEmergency extends Emergency {
 
     private final Track brokenTrack;
 
-    public TrackEmergency(Track track) {
+    public TrackEmergency(Timetable timetable, Topology topology, Track track) {
+        super(timetable, topology);
+        brokenTrack = track;
+    }
+
+    public TrackEmergency(String message, Timetable timetable, Topology topology, Track track) {
+        super(message, timetable, topology);
         brokenTrack = track;
     }
 
@@ -19,7 +25,8 @@ public class TrackEmergency {
         return brokenTrack;
     }
 
-    public void handle(Timetable timetable, Topology topology) {
+    @Override
+    public void apply() {
         brokenTrack.setActive(false);
         List<Track> neighbourTracks = new ArrayList<>(brokenTrack.getStartNode().getInTracks());
         neighbourTracks.addAll(brokenTrack.getFinishNode().getOutTracks());
@@ -53,4 +60,5 @@ public class TrackEmergency {
             }
         }
     }
+
 }

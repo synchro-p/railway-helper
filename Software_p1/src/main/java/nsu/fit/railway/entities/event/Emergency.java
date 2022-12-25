@@ -6,6 +6,8 @@ import nsu.fit.railway.entities.topology.Topology;
 public abstract class Emergency extends Event {
 
     private String message = "";
+    protected final Timetable timetable;
+    protected final Topology topology;
 
     public String getMessage() {
         return message;
@@ -15,5 +17,14 @@ public abstract class Emergency extends Event {
         this.message = message;
     }
 
-    public abstract void handle(Timetable timetable, Topology topology);
+    public Emergency(Timetable timetable, Topology topology) {
+        this.timetable = timetable;
+        this.topology = topology;
+    }
+
+    public Emergency(String message, Timetable timetable, Topology topology) {
+        this.message = message;
+        this.timetable = timetable;
+        this.topology = topology;
+    }
 }

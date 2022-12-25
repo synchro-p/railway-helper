@@ -6,8 +6,8 @@ public class Switch extends ControlElement {
     private final SwitchInfo switchInfo;
     private Track currentTo;
 
-    public Switch(Track trackFrom, List<Track> tracksTo, Track currentTo) {
-        this.switchInfo = new SwitchInfo(trackFrom, tracksTo);
+    public Switch(Integer id, Track trackFrom, List<Track> tracksTo, Track currentTo) {
+        this.switchInfo = new SwitchInfo(id, trackFrom, tracksTo);
         this.currentTo = currentTo;
     }
 

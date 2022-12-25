@@ -10,7 +10,13 @@ public class ComingEmergency extends Emergency {
 
     private final TimetableEntry coming;
 
-    public ComingEmergency(TimetableEntry coming) {
+    public ComingEmergency(Timetable timetable, Topology topology, TimetableEntry coming) {
+        super(timetable, topology);
+        this.coming = coming;
+    }
+
+    public ComingEmergency(String message, Timetable timetable, Topology topology, TimetableEntry coming) {
+        super(message, timetable, topology);
         this.coming = coming;
     }
 
@@ -19,7 +25,7 @@ public class ComingEmergency extends Emergency {
     }
 
     @Override
-    public void handle(Timetable timetable, Topology topology) {
+    public void apply() {
         List<TimetableEntry> timetableEntries = timetable.getEntries();
 
         int index;

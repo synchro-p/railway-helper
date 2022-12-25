@@ -12,7 +12,13 @@ public class SwitchEmergency extends Emergency {
 
     private final Node nodeWithBrokenSwitch;
 
-    public SwitchEmergency(Node node) {
+    public SwitchEmergency(Timetable timetable, Topology topology, Node node) {
+        super(timetable, topology);
+        nodeWithBrokenSwitch = node;
+    }
+
+    public SwitchEmergency(String message, Timetable timetable, Topology topology, Node node) {
+        super(message, timetable, topology);
         nodeWithBrokenSwitch = node;
     }
 
@@ -21,12 +27,12 @@ public class SwitchEmergency extends Emergency {
     }
 
     @Override
-    public void handle(Timetable timetable, Topology topology) {
+    public void apply() {
         List<Track> neighbourTracks = new ArrayList<>(nodeWithBrokenSwitch.getInTracks());
         neighbourTracks.addAll(nodeWithBrokenSwitch.getOutTracks());
 
         for (Track track: neighbourTracks) {
-            new TrackEmergency(track).handle(timetable, topology);
+            new TrackEmergency(timetable, topology, track).apply();
         }
     }
 }

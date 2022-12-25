@@ -11,8 +11,7 @@ public class TimetableEntry {
     private Node inputNode;
     private Node outputNode;
     private Duration stationingTime;
-    private Integer length;
-    private Type type;
+    private Train train;
 
 
     public LocalDateTime getArrivalIntervalStart() {
@@ -55,19 +54,11 @@ public class TimetableEntry {
         this.stationingTime = stationingTime;
     }
 
-    public Integer getLength() {
-        return length;
+    public Train getTrain() {
+        return train;
     }
 
-    public void setLength(Integer length) {
-        this.length = length;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
+    public void setTrain(Train train) {
+        this.train = train;
     }
 }

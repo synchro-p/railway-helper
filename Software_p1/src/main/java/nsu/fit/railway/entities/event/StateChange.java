@@ -1,5 +1,8 @@
 package nsu.fit.railway.entities.event;
 
+import nsu.fit.railway.entities.timetable.Timetable;
+import nsu.fit.railway.entities.topology.Topology;
+
 import java.util.function.Consumer;
 
 public class StateChange<T> extends Event{
