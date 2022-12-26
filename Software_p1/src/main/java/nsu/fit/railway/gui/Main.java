@@ -15,7 +15,6 @@ import nsu.fit.railway.gui.graph.Layout;
 import nsu.fit.railway.gui.graph.Model;
 import nsu.fit.railway.gui.graph.RandomLayout;
 
-import java.io.IOException;
 import java.util.*;
 
 import static nsu.fit.railway.entities.timetable.Type.PASSENGER;
@@ -32,7 +31,7 @@ public class Main extends Application {
     Topology topology;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         nodes.add(testNode1);
         nodes.add(testNode2);
         ArrayList<Type> canServe = new ArrayList<>();

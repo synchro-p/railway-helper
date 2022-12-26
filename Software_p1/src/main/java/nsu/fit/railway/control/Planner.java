@@ -9,16 +9,14 @@ import nsu.fit.railway.entities.topology.*;
 import org.projog.api.Projog;
 import org.projog.api.QueryResult;
 import org.projog.api.QueryStatement;
-import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 import java.io.File;
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
 
 public class Planner {
 
@@ -34,11 +32,11 @@ public class Planner {
         Signal signal2 = new Signal(2);
 
         Track track1 = new Track(
-                new TrackInfo(1, 10), new ArrayList<>(Arrays.asList(Type.PASS)), true
+                new TrackInfo(1, 10), new ArrayList<>(List.of(Type.PASS)), true
         );
 
         Track track2 = new Track(
-                new TrackInfo(2, 10), new ArrayList<>(Arrays.asList(Type.PASS)), true
+                new TrackInfo(2, 10), new ArrayList<>(List.of(Type.PASS)), true
         );
 
         Track track3 = new Track(
@@ -50,62 +48,62 @@ public class Planner {
         );
 
         Track track5 = new Track(
-                new TrackInfo(5, 10), new ArrayList<>(Arrays.asList(Type.PASS)), true
+                new TrackInfo(5, 10), new ArrayList<>(List.of(Type.PASS)), true
         );
 
         Track track6 = new Track(
-                new TrackInfo(6, 10), new ArrayList<>(Arrays.asList(Type.PASS)), true
+                new TrackInfo(6, 10), new ArrayList<>(List.of(Type.PASS)), true
         );
 
         Track track7 = new Track(
-                new TrackInfo(7, 10), new ArrayList<>(Arrays.asList(Type.PASS)), true
+                new TrackInfo(7, 10), new ArrayList<>(List.of(Type.PASS)), true
         );
 
-        Switch switch1 = new Switch(1, track5, new ArrayList<>(Arrays.asList(track7)), track7);
+        Switch switch1 = new Switch(1, track5, new ArrayList<>(List.of(track7)), track7);
 
-        Node node1 = new Node(
+        TopologyNode node1 = new TopologyNode(
                 1,
                 new ArrayList<>(),
                 true,
                 false
         );
 
-        Node node2 = new Node(
+        TopologyNode node2 = new TopologyNode(
                 2,
-                new ArrayList<>(Arrays.asList(signal1)),
+                new ArrayList<>(List.of(signal1)),
                 false,
                 false
         );
 
-        Node node3 = new Node(
+        TopologyNode node3 = new TopologyNode(
                 3,
                 new ArrayList<>(),
                 false,
                 false
         );
 
-        Node node4 = new Node(
+        TopologyNode node4 = new TopologyNode(
                 4,
-                new ArrayList<>(Arrays.asList(signal2)),
+                new ArrayList<>(List.of(signal2)),
                 false,
                 false
         );
 
-        Node node5 = new Node(
+        TopologyNode node5 = new TopologyNode(
                 5,
                 new ArrayList<>(),
                 false,
                 false
         );
 
-        Node node6 = new Node(
+        TopologyNode node6 = new TopologyNode(
                 6,
-                new ArrayList<>(Arrays.asList(switch1)),
+                new ArrayList<>(List.of(switch1)),
                 false,
                 false
         );
 
-        Node node7 = new Node(
+        TopologyNode node7 = new TopologyNode(
                 7,
                 new ArrayList<>(),
                 false,
@@ -154,7 +152,7 @@ public class Planner {
         track7.setStartNode(node6);
         track7.setFinishNode(node7);
 
-        Set<Node> nodeSet = new HashSet<>(Set.of(node1, node2, node3, node4, node5, node6, node7));
+        Set<TopologyNode> nodeSet = new HashSet<>(Set.of(node1, node2, node3, node4, node5, node6, node7));
         Set<Track> trackSet = new HashSet<>(Set.of(track1, track2, track3, track4, track5, track6, track7));
 
         Topology topology = new Topology(nodeSet, trackSet);
@@ -188,7 +186,6 @@ public class Planner {
     }
 
     public EventQueue createSchedule(Topology topology, Timetable timetable){
-        //TODO algorithm or Prolog dependencies
         uploadTopology(topology);
 
         return termToEventQueue(timetable, topology, plan(timetable));
@@ -262,7 +259,7 @@ public class Planner {
 
                 Signal signal = (Signal) topology.getNodes()
                         .stream()
-                        .map(Node::getAssociated)
+                        .map(TopologyNode::getAssociated)
                         .flatMap(Collection::stream)
                         .filter(controlElement -> controlElement instanceof Signal)
                         .filter(signalElement -> ((Signal) signalElement).getSignalInfo().getId() == signalId)
@@ -287,7 +284,7 @@ public class Planner {
 
                 Switch aSwitch = (Switch) topology.getNodes()
                         .stream()
-                        .map(Node::getAssociated)
+                        .map(TopologyNode::getAssociated)
                         .flatMap(Collection::stream)
                         .filter(controlElement -> controlElement instanceof Switch)
                         .filter(switchElement -> ((Switch) switchElement).getSwitchInfo().getId() == switchId)
@@ -371,10 +368,8 @@ public class Planner {
         uploadTracks(topology.getTracks());
     }
 
-    private void uploadNodes(Set<Node> nodes) {
-        for (Node node : nodes) {
-            // govnom vonyaet
-            // nu da i pohuy..
+    private void uploadNodes(Set<TopologyNode> nodes) {
+        for (TopologyNode node : nodes) {
             for (ControlElement controlElement : node.getAssociated()) {
                 if (controlElement instanceof Switch) {
                     uploadSwitch(node.getId(), (Switch) controlElement);

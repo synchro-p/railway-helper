@@ -29,19 +29,4 @@ public class ViewController {
 //            SimulationGUI.changeView(Topology, Datetime);
         }
     }
-
-//    public void addTimetableEntry(TimetableEntry entry) {
-//        this.timetable.addEntry(entry);
-//        //update GUI
-//    }
-//
-//    public void removeTimetableEntry(Integer id) {
-//        this.timetable.removeEntry(id);
-//        //update GUI
-//    }
-//
-//    public void editTimetableEntry(Integer id, TimetableEntry newEntry) {
-//        this.timetable.editEntry(id, newEntry);
-//        //update GUI
-//    }
 }

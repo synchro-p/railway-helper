@@ -3,8 +3,6 @@ package nsu.fit.railway.control;
 import nsu.fit.railway.entities.event.Emergency;
 import nsu.fit.railway.entities.event.Event;
 import nsu.fit.railway.entities.event.EventQueue;
-import nsu.fit.railway.entities.timetable.Timetable;
-import nsu.fit.railway.entities.topology.Topology;
 
 import java.time.LocalDateTime;
 import java.util.AbstractMap.SimpleEntry;
@@ -23,16 +21,17 @@ public class EventProcessor {
     public SimpleEntry<LocalDateTime, LocalDateTime> processEvent(
             SimpleEntry<SimpleEntry<LocalDateTime, LocalDateTime>, Event> eventPair
     ) {
-            SimpleEntry<LocalDateTime, LocalDateTime> timestamp = eventPair.getKey();
+        SimpleEntry<LocalDateTime, LocalDateTime> interval = eventPair.getKey();
+            LocalDateTime timestamp = eventPair.getKey().getValue();
             Event event = eventPair.getValue();
 
         //TODO normal implementation for emergency generation
         Emergency generated = emergencyGenerator.roll();
         if (generated != null) {
             LocalDateTime randomDateTime = RandomDateTimeGenerator.after(timestamp);
-            eventQueue.add(new SimpleEntry<>(randomDateTime, generated));
+            eventQueue.add(new SimpleEntry<>(new SimpleEntry<>(randomDateTime, randomDateTime), generated));
         }
         event.apply();
-        return timestamp;
+        return interval;
     }
 }
