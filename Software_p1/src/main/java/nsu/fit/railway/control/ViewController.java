@@ -5,6 +5,7 @@ import nsu.fit.railway.entities.timetable.Timetable;
 import nsu.fit.railway.entities.topology.Topology;
 
 import java.time.LocalDateTime;
+import java.util.AbstractMap.SimpleEntry;
 
 public class ViewController {
 
@@ -24,7 +25,7 @@ public class ViewController {
                         configuration.getFrequency(), configuration.getPossibleTypes()),
                 events);
         while(!events.isEmpty()) {
-            LocalDateTime timestamp = processor.processEvent(events.poll());
+            SimpleEntry<LocalDateTime, LocalDateTime> timestamp = processor.processEvent(events.poll());
 //            SimulationGUI.changeView(Topology, Datetime);
         }
     }

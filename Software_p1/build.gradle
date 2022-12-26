@@ -18,6 +18,12 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.1'
+    // https://mvnrepository.com/artifact/org.projog/projog-core
+    implementation 'org.projog:projog-core:0.7.0'
+    // https://mvnrepository.com/artifact/org.projog/projog-clp
+    implementation 'org.projog:projog-clp:0.2.0'
+    // https://mvnrepository.com/artifact/org.projog/projog-test
+    implementation 'org.projog:projog-test:0.5.0'
 }
 
 test {
