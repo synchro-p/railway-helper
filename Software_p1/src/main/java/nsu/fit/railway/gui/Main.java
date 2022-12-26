@@ -2,7 +2,9 @@ package nsu.fit.railway.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import nsu.fit.railway.entities.timetable.Type;
@@ -15,6 +17,7 @@ import nsu.fit.railway.gui.graph.Layout;
 import nsu.fit.railway.gui.graph.Model;
 import nsu.fit.railway.gui.graph.RandomLayout;
 
+import java.io.IOException;
 import java.util.*;
 
 import static nsu.fit.railway.entities.timetable.Type.PASSENGER;
@@ -31,7 +34,7 @@ public class Main extends Application {
     Topology topology;
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         nodes.add(testNode1);
         nodes.add(testNode2);
         ArrayList<Type> canServe = new ArrayList<>();
@@ -40,19 +43,22 @@ public class Main extends Application {
         topology = new Topology(nodes, tracks);
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
-        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainView.fxml")));
-        BorderPane root = new BorderPane();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainView.fxml")));
+//        BorderPane root = new BorderPane();
 
         graph = new Graph(topology.getNodes().iterator().next());
 
-        root.setCenter(graph.getScrollPane());
-        //Scene scene = new Scene(fxmlLoader.load(), 600, 300);
-        //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        ((SplitPane) root).getItems().remove(1);
+        ((SplitPane) root).getItems().add(1, graph.getScrollPane());
+//        root.setCenter(graph.getScrollPane());
+        Scene scene = new Scene(root, 600, 300);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-        Scene scene = new Scene(root, 1024, 768);
+//        Scene scene = new Scene(root, 1024, 768);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
         stage.setTitle("Railway helper");
         stage.setScene(scene);
+
 
 
         addGraphComponents();
