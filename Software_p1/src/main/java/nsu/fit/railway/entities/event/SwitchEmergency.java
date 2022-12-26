@@ -7,10 +7,11 @@ import nsu.fit.railway.entities.topology.Track;
 
 import java.util.ArrayList;
 import java.util.List;
+import nsu.fit.railway.entities.topology.TopologyNode;
 
 public class SwitchEmergency extends Emergency {
 
-    private final Node nodeWithBrokenSwitch;
+    private final TopologyNode nodeWithBrokenSwitch;
 
     public SwitchEmergency(Timetable timetable, Topology topology, Node node) {
         super(timetable, topology);
@@ -22,7 +23,7 @@ public class SwitchEmergency extends Emergency {
         nodeWithBrokenSwitch = node;
     }
 
-    public Node getNodeWithBrokenSwitch() {
+    public TopologyNode getNodeWithBrokenSwitch() {
         return nodeWithBrokenSwitch;
     }
 
