@@ -78,28 +78,7 @@ public class MainViewController extends Application {
     Model model;
     @Override
     public void start(Stage stage) throws IOException {
-        nodes.add(testNode1);
-        nodes.add(testNode2);
-        nodes.add(testNode3);
-        testTrack1.setStartNode(testNode1);
-        testTrack1.setCurrentTrain(new Train(12, 8, PASSENGER));
-        testTrack1.setFinishNode(testNode3);
-        testTrack2.setStartNode(testNode2);
-        testTrack2.setFinishNode(testNode3);
-        tracks.add(testTrack1);
-        tracks.add(testTrack2);
-        ArrayList<Type> canServe = new ArrayList<>();
-        canServe.add(PASSENGER);
-        testTrack1.setCanServe(canServe);
 
-        testTopology = new Topology(nodes, tracks);
-        topology = testTopology;
-        //TODO: file input
-        //timetable = JacksonTimetableRepositoryImpl.getTimetable();
-        //topology = JacksonTopologyRepositoryImpl.getTopology();
-        topology = TimetableTopologyGenerator.createTopology();
-        timetable = TimetableTopologyGenerator.createTimetable();
-        viewController = new ViewController(topology, timetable, this);
         FXMLLoader fxmlLoader = new FXMLLoader(MainViewController.class.getResource("mainView.fxml"));
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainView.fxml")));
 //        BorderPane root = new BorderPane();
@@ -184,6 +163,32 @@ public class MainViewController extends Application {
             }
             edge.setNewStyle();
         }
+    }
+
+    public MainViewController( ) {
+        nodes.add(testNode1);
+        nodes.add(testNode2);
+        nodes.add(testNode3);
+        testTrack1.setStartNode(testNode1);
+        testTrack1.setCurrentTrain(new Train(12, 8, PASSENGER));
+        testTrack1.setFinishNode(testNode3);
+        testTrack2.setStartNode(testNode2);
+        testTrack2.setFinishNode(testNode3);
+        tracks.add(testTrack1);
+        tracks.add(testTrack2);
+        ArrayList<Type> canServe = new ArrayList<>();
+        canServe.add(PASSENGER);
+        testTrack1.setCanServe(canServe);
+
+        testTopology = new Topology(nodes, tracks);
+        topology = testTopology;
+        //TODO: file input
+        //timetable = JacksonTimetableRepositoryImpl.getTimetable();
+        //topology = JacksonTopologyRepositoryImpl.getTopology();
+        topology = TimetableTopologyGenerator.createTopology();
+        timetable = TimetableTopologyGenerator.createTimetable();
+        viewController = new ViewController(topology, timetable, this);
+        System.out.println(viewController);
     }
     public static void main(String[] args) {
         launch(args);
