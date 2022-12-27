@@ -71,7 +71,6 @@ public class MainController {
         graph = new Graph(topology.getNodes().iterator().next());
         addGraphComponents();
 
-//        app.doGraph(graph);
         Layout layout = new RandomLayout(graph);
         layout.execute();
     }
@@ -83,6 +82,7 @@ public class MainController {
                 new EmergencyGenerator(
                         configuration.getFrequency(), configuration.getPossibleTypes()),
                 events);
+        app.doGraph(graph);
     }
 
     public void simulationStep() {
