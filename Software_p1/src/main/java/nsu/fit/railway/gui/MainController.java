@@ -79,9 +79,6 @@ public class MainController {
     }
 
     private void restartSimulation() {
-
-
-
         this.events = new Planner().createSchedule(topology,timetable);
         EmergencyConfiguration configuration = new EmergencyConfiguration();
         this.processor = new EventProcessor(
@@ -141,7 +138,6 @@ public class MainController {
         addTooltips();
 
         graph.endUpdate();
-
     }
     private void addTooltips() {
         for (Cell cell : model.getAddedCells()) {
