@@ -13,16 +13,16 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<SplitPane dividerPositions="0.7889447236180904, 0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane fx:controller="nsu.fit.railway.gui.MainViewController" dividerPositions="0.7889447236180904, 0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
 <!--<SplitPane dividerPositions="0.7889447236180904, 0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainViewController">-->
     <items>
         <MenuBar fx:id="menuBar" prefHeight="20.0" prefWidth="598.0">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Open topology" />
-                        <MenuItem mnemonicParsing="false" text="Open timetable" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id = "menuOpenTopology" onAction = "#openTimetable" mnemonicParsing="false" text="Open topology" />
+                        <MenuItem fx:id = "menuOpenTimetable" onAction = "#openTopology" mnemonicParsing="false" text="Open timetable" />
+                        <MenuItem fx:id = "menuClose" mnemonicParsing="false" text="Close" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit" />
@@ -41,7 +41,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="forwardBtn" alignment="CENTER" mnemonicParsing="false" text="Step forward">
+                        <Button fx:id="forwardBtn" onAction="#forwardBtnClicked" alignment="CENTER" mnemonicParsing="false" text="Step forward">
                             <padding>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </padding>
@@ -49,7 +49,7 @@
                                 <Cursor fx:constant="OPEN_HAND" />
                             </cursor>
                         </Button>
-                        <Button fx:id="restartBtn" alignment="CENTER" mnemonicParsing="false" text="Restart" textAlignment="CENTER" GridPane.columnIndex="1">
+                        <Button fx:id="restartBtn" onAction="#restartBtnClicked" alignment="CENTER" mnemonicParsing="false" text="Restart" textAlignment="CENTER" GridPane.columnIndex="1">
                             <cursor>
                                 <Cursor fx:constant="OPEN_HAND" />
                             </cursor>

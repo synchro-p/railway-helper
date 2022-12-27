@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import nsu.fit.railway.entities.timetable.Type;
 import nsu.fit.railway.entities.topology.Topology;
@@ -70,8 +69,6 @@ public class Main extends Application {
         stage.setTitle("Railway helper");
         stage.setScene(scene);
 
-
-
         addGraphComponents();
 
         Layout layout = new RandomLayout(graph);
@@ -85,26 +82,11 @@ public class Main extends Application {
 
         graph.beginUpdate();
 
-
-//        for (TopologyNode cell : topology.getNodes()) {
-//            model.addCell(cell);
-//        }
         for (Track track : topology.getTracks()) {
             model.addCell(track.getStartNode());
             model.addCell(track.getFinishNode());
             model.addEdge(track.getStartNode().getId(), track.getFinishNode().getId(), track);
         }
-
-        //model.addEdge();
-//        model.addEdge(1, 2);
-//        model.addEdge(1, 3);
-//        model.addEdge(2, 3);
-        //model.addEdge(2, 3);
-        //model.addEdge(2, 4);
-        //model.addEdge(3, 4);
-        //model.addEdge(2, 5);
-        //model.addEdge(4, 6);
-        //model.addEdge(5, 7);
 
         graph.endUpdate();
 
