@@ -29,7 +29,9 @@ public class MainController {
     private Button forwardBtn;
     @FXML
     private void forwardBtnClicked() {
+        System.out.println("Starting simulation step...");
         simulationStep();
+        System.out.println("Step made");
     }
     @FXML
     private AnchorPane mainPane;
@@ -92,9 +94,11 @@ public class MainController {
         }
         AbstractMap.SimpleEntry<LocalDateTime, LocalDateTime> timestamp = processor.processEvent(events.poll());
 //        app.showUpdated(timestamp);
+        redrawStep();
     }
 
     public void redrawStep() {
+        System.out.println("redrawing");
         List<Track> toTracks = new ArrayList<>(Collections.emptyList());
         for (Cell cell : model.getAddedCells()) {
             cell.setNewStyle();

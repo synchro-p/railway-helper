@@ -35,7 +35,7 @@ public class Edge extends Group {
         endY = target.getBoundsInParent().getHeight() / 2.0;
         line.endXProperty().bind( target.layoutXProperty().add(endX));
         line.endYProperty().bind( target.layoutYProperty().add(endY));
-        line.setStrokeWidth(1.5);
+        line.setStrokeWidth(3);
         line.setStrokeLineJoin(StrokeLineJoin.ROUND);
 
         getChildren().add( line);
@@ -54,7 +54,7 @@ public class Edge extends Group {
         if (this.track.isOccupied()) {
             Text trainText = new Text(x, y, String.valueOf(this.track.getCurrentTrain().getId()));
             getChildren().add(trainText);
-            line.setStrokeWidth(2.5);
+            line.setStrokeWidth(5);
         }
         if (!track.isActive()) {
             line.setStrokeDashOffset(5);
