@@ -17,7 +17,7 @@ public class ViewController {
 
     private EventQueue events;
     private EventProcessor processor;
-    private EmergencyConfiguration configuration;
+
     public ViewController(Topology topology, Timetable timetable, Main gui) {
         this.topology = topology;
         this.timetable = timetable;
@@ -26,7 +26,7 @@ public class ViewController {
 
     public void startSimulation() {
         this.events = new Planner().createSchedule(topology,timetable);
-        this.configuration = new EmergencyConfiguration();
+        EmergencyConfiguration configuration = new EmergencyConfiguration();
         this.processor = new EventProcessor(
                 new EmergencyGenerator(
                         configuration.getFrequency(), configuration.getPossibleTypes()),
