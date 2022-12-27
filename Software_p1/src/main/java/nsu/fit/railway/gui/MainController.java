@@ -72,13 +72,14 @@ public class MainController {
         timetable = TimetableTopologyGenerator.createTimetable();
         app = MainApp.app;
         graph = new Graph(topology.getNodes().iterator().next());
-        addGraphComponents();
-
         Layout layout = new RandomLayout(graph);
         layout.execute();
     }
 
     private void restartSimulation() {
+
+
+        addGraphComponents();
         this.events = new Planner().createSchedule(topology,timetable);
         EmergencyConfiguration configuration = new EmergencyConfiguration();
         this.processor = new EventProcessor(
@@ -120,6 +121,7 @@ public class MainController {
         addTooltips();
         //TODO
         //А КАК ПОКАЗАТЬ????
+        app.doGraph(graph);
     }
 
     private void addGraphComponents() {
