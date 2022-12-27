@@ -12,6 +12,7 @@ import nsu.fit.railway.control.EventProcessor;
 import nsu.fit.railway.control.Planner;
 import nsu.fit.railway.entities.event.EventQueue;
 import nsu.fit.railway.entities.timetable.Timetable;
+import nsu.fit.railway.entities.timetable.Type;
 import nsu.fit.railway.entities.topology.*;
 import nsu.fit.railway.gui.graph.*;
 
@@ -112,6 +113,9 @@ public class MainController {
             }
             edge.setNewStyle();
         }
+        addTooltips();
+        //TODO
+        //А КАК ПОКАЗАТЬ????
     }
 
     private void addGraphComponents() {
@@ -126,6 +130,13 @@ public class MainController {
             model.addEdge(track.getStartNode().getId(), track.getFinishNode().getId(), track);
         }
         //adding tooltips
+        addTooltips();
+        redrawStep();
+
+        graph.endUpdate();
+
+    }
+    private void addTooltips() {
         for (Cell cell : model.getAddedCells()) {
             Tooltip cellTooltip = new Tooltip();
             StringBuilder tooltipText = new StringBuilder("ID : " + cell.getCellId());
@@ -143,9 +154,18 @@ public class MainController {
             cellTooltip.setText(tooltipText.toString());
             Tooltip.install(cell, cellTooltip);
         }
-        redrawStep();
+        for (Edge edge : model.getAddedEdges()) {
+            Tooltip cellTooltip = new Tooltip();
+            StringBuilder tooltipText = new StringBuilder("ID : " + edge.getTrack().getTrackInfo().getId());
+            tooltipText.append("\nServe:\n");
+            for (Type serve : edge.getTrack().getCanServe()) {
+                tooltipText.append("\t" + serve + "\n");
+            }
+            if (edge.getTrack().isOccupied())
+                tooltipText.append("Train: " + edge.getTrack().getCurrentTrain());
 
-        graph.endUpdate();
-
+            cellTooltip.setText(tooltipText.toString());
+            Tooltip.install(edge, cellTooltip);
+        }
     }
 }

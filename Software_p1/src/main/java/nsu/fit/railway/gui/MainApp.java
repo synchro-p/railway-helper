@@ -14,7 +14,6 @@ import java.util.Objects;
 public class MainApp extends Application {
     public static MainApp app;
     public static Parent root;
-
     @Override
     public void start(Stage stage) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainView.fxml")));
