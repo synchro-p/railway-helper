@@ -17,15 +17,20 @@ public class Cell extends Pane {
     List<Cell> parents = new ArrayList<>();
 
     Node view;
+    TopologyNode node;
 
     public Cell(TopologyNode node) {
         this.cellId = node.getId();
-        Circle view = new Circle( 10);
+        this.node = node;
+        Circle view = new Circle( 8);
         view.setStroke(Color.DARKRED);
         view.setFill(Color.DARKRED);
 
         setView( view);
     }
+    //public void setColor {
+    //    this.node.getAssociated();
+    //}
 
     public void addCellChild(Cell cell) {
         children.add(cell);

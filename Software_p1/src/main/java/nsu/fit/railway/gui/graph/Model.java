@@ -1,11 +1,9 @@
 package nsu.fit.railway.gui.graph;
 
 import nsu.fit.railway.entities.topology.TopologyNode;
+import nsu.fit.railway.entities.topology.Track;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Model {
 
@@ -73,6 +71,10 @@ public class Model {
     }
 
     public void addCell(TopologyNode topologyNode) {
+        for (Cell cell : this.addedCells) {
+            if (Objects.equals(cell.getCellId(), topologyNode.getId()))
+                return;
+        }
         Cell cell = new Cell(topologyNode);
         addCell(cell);
     }
@@ -83,12 +85,12 @@ public class Model {
 
     }
 
-    public void addEdge( Integer sourceId, Integer targetId) {
+    public void addEdge(Integer sourceId, Integer targetId, Track track) {
 
         Cell sourceCell = cellMap.get( sourceId);
         Cell targetCell = cellMap.get( targetId);
 
-        Edge edge = new Edge( sourceCell, targetCell);
+        Edge edge = new Edge( sourceCell, targetCell, track);
 
         addedEdges.add( edge);
 
