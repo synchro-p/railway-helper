@@ -35,7 +35,7 @@ public class MainViewController extends Application {
     private Button forwardBtn;
     @FXML
     private void forwardBtnClicked() {
-
+        //makeStepSimulation();
     }
     @FXML
     private AnchorPane mainPane;
@@ -64,21 +64,15 @@ public class MainViewController extends Application {
 
 
     Graph graph;
-    //!!Testing data
-    //TODO: link with file input
-    TopologyNode testNode1 = new TopologyNode(1, Collections.emptyList(), true, false);
-    TopologyNode testNode2 = new TopologyNode(2, Collections.emptyList(), false, true);
-    TopologyNode testNode3 = new TopologyNode(3, Collections.emptyList(), false, false);
-    Set<TopologyNode> nodes = new HashSet<>();
-    Track testTrack1 = new Track(new TrackInfo(1, 10), Collections.emptyList(), false);
-    Track testTrack2 = new Track(new TrackInfo(1, 10), Collections.emptyList(), false);
-    Set<Track> tracks = new HashSet<>();
     Topology testTopology;
     ViewController viewController;
     Model model;
     @Override
     public void start(Stage stage) throws IOException {
-
+        //TODO: file input
+        topology = TimetableTopologyGenerator.createTopology();
+        timetable = TimetableTopologyGenerator.createTimetable();
+        viewController = new ViewController(topology, timetable, this);
         FXMLLoader fxmlLoader = new FXMLLoader(MainViewController.class.getResource("mainView.fxml"));
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainView.fxml")));
 //        BorderPane root = new BorderPane();
@@ -132,6 +126,21 @@ public class MainViewController extends Application {
             cellTooltip.setText(tooltipText.toString());
             Tooltip.install(cell, cellTooltip);
         }
+        for (Edge edge : model.getAddedEdges()) {
+            Tooltip cellTooltip = new Tooltip();
+            StringBuilder tooltipText = new StringBuilder("ID : " + edge.getTrack().getTrackInfo().getId());
+            tooltipText.append("\nLength: " + edge.getTrack().getTrackInfo().getLength());
+            tooltipText.append("\nCan serve:\n");
+            for (Type serve : edge.getTrack().getCanServe()) {
+                tooltipText.append("\t" + valueOf(serve) + "\n");
+            }
+            if (edge.getTrack().isOccupied()) {
+                tooltipText.append("Train ID: " + edge.getTrack().getCurrentTrain().getId());
+            }
+            cellTooltip.setText(tooltipText.toString());
+            Tooltip.install(edge, cellTooltip);
+        }
+
         redrawStep();
 
         graph.endUpdate();
@@ -156,32 +165,12 @@ public class MainViewController extends Application {
             }
         }
         for (Edge edge : model.getAddedEdges()) {
-            if (toTracks.contains(edge.getTrack())) {
-                edge.setActiveSwitch(true);
-            } else {
-                edge.setActiveSwitch(false);
-            }
+            edge.setActiveSwitch(toTracks.contains(edge.getTrack()));
             edge.setNewStyle();
         }
     }
 
     public MainViewController( ) {
-        nodes.add(testNode1);
-        nodes.add(testNode2);
-        nodes.add(testNode3);
-        testTrack1.setStartNode(testNode1);
-        testTrack1.setCurrentTrain(new Train(12, 8, PASSENGER));
-        testTrack1.setFinishNode(testNode3);
-        testTrack2.setStartNode(testNode2);
-        testTrack2.setFinishNode(testNode3);
-        tracks.add(testTrack1);
-        tracks.add(testTrack2);
-        ArrayList<Type> canServe = new ArrayList<>();
-        canServe.add(PASSENGER);
-        testTrack1.setCanServe(canServe);
-
-        testTopology = new Topology(nodes, tracks);
-        topology = testTopology;
         //TODO: file input
         //timetable = JacksonTimetableRepositoryImpl.getTimetable();
         //topology = JacksonTopologyRepositoryImpl.getTopology();

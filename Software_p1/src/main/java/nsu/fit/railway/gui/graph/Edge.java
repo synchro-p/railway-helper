@@ -54,13 +54,19 @@ public class Edge extends Group {
         if (this.track.isOccupied()) {
             Text trainText = new Text(x, y, String.valueOf(this.track.getCurrentTrain().getId()));
             getChildren().add(trainText);
-            line.setStroke(Color.DARKGREEN);
-            getChildren().remove(line);
-            getChildren().add(line);
+            line.setStrokeWidth(2.5);
         }
         if (!track.isActive()) {
             line.setStrokeDashOffset(5);
         }
+        if (this.isActiveSwitch) {
+            line.setStroke(Color.DARKGREEN);
+        }
+        else {
+            line.setStroke(Color.BLACK);
+        }
+        getChildren().remove(line);
+        getChildren().add(line);
     }
 
     public Cell getSource() {
