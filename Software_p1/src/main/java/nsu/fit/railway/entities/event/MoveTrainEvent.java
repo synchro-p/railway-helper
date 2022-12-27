@@ -17,7 +17,8 @@ public class MoveTrainEvent extends Event {
 
     @Override
     public void apply() {
-        fromTrack.freeTrack();
+        if (fromTrack != null)
+            fromTrack.freeTrack();
         toTrack.setCurrentTrain(train);
         train.setOccupiedTrack(toTrack);
     }
