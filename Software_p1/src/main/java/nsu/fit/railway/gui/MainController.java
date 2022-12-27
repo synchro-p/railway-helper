@@ -31,6 +31,7 @@ public class MainController {
     private void forwardBtnClicked() {
         System.out.println("Starting simulation step...");
         simulationStep();
+        //addGraphComponents();
         System.out.println("Step made");
     }
     @FXML
@@ -66,20 +67,18 @@ public class MainController {
 
     Graph graph;
     Model model;
-
     public MainController() {
         topology = TimetableTopologyGenerator.createTopology();
         timetable = TimetableTopologyGenerator.createTimetable();
         app = MainApp.app;
         graph = new Graph(topology.getNodes().iterator().next());
+        addGraphComponents();
         Layout layout = new RandomLayout(graph);
         layout.execute();
     }
 
     private void restartSimulation() {
-
-
-        addGraphComponents();
+        //addGraphComponents();
         this.events = new Planner().createSchedule(topology,timetable);
         EmergencyConfiguration configuration = new EmergencyConfiguration();
         this.processor = new EventProcessor(
@@ -119,9 +118,11 @@ public class MainController {
             edge.setNewStyle();
         }
         addTooltips();
+        //graph.endUpdate();
+        //app.doGraph(graph);
         //TODO
         //А КАК ПОКАЗАТЬ????
-        app.doGraph(graph);
+        //app.doGraph(graph);
     }
 
     private void addGraphComponents() {
@@ -135,7 +136,7 @@ public class MainController {
             model.addCell(track.getFinishNode());
             model.addEdge(track.getStartNode().getId(), track.getFinishNode().getId(), track);
         }
-        //adding tooltips
+
         addTooltips();
         redrawStep();
 
