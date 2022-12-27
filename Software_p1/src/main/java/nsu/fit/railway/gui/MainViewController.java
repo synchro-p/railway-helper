@@ -150,6 +150,10 @@ public class MainViewController extends Application {
         viewController.startSimulation();
     }
 
+    //public void makeStepSimulation() {
+    //    viewController.simulationStep();
+    //}
+
     public void setTopology(Topology newTopology) {
         topology = newTopology;
     }
