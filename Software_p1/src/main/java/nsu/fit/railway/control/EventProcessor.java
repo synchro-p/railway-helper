@@ -31,6 +31,9 @@ public class EventProcessor {
             LocalDateTime randomDateTime = RandomDateTimeGenerator.after(timestamp);
             eventQueue.add(new SimpleEntry<>(new SimpleEntry<>(randomDateTime, randomDateTime), generated));
         }
+
+        System.out.println(event.toString());
+
         event.apply();
         return interval;
     }

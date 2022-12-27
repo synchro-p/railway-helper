@@ -29,9 +29,7 @@ public class MainController {
     private Button forwardBtn;
     @FXML
     private void forwardBtnClicked() {
-        System.out.println("Starting simulation step...");
         simulationStep();
-        System.out.println("Step made");
     }
     @FXML
     private AnchorPane mainPane;
@@ -93,12 +91,11 @@ public class MainController {
 //            app.tellUserNoMoreEvents();
         }
         AbstractMap.SimpleEntry<LocalDateTime, LocalDateTime> timestamp = processor.processEvent(events.poll());
-//        app.showUpdated(timestamp);
         redrawStep();
     }
 
     public void redrawStep() {
-        System.out.println("redrawing");
+        graph.beginUpdate();
         List<Track> toTracks = new ArrayList<>(Collections.emptyList());
         for (Cell cell : model.getAddedCells()) {
             cell.setNewStyle();
@@ -118,6 +115,7 @@ public class MainController {
             edge.setNewStyle();
         }
         addTooltips();
+        graph.endUpdate();
         //TODO
         //А КАК ПОКАЗАТЬ????
         app.doGraph(graph);
