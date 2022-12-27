@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.text.Text;
 import nsu.fit.railway.entities.topology.Track;
 
 public class Edge extends Group {
@@ -13,7 +14,8 @@ public class Edge extends Group {
 
     Line line;
     Track track;
-
+    boolean isActiveSwitch = false;
+    double startX, startY, endX, endY;
     public Edge(Cell source, Cell target, Track track) {
 
         this.source = source;
@@ -24,24 +26,41 @@ public class Edge extends Group {
         target.addCellParent(source);
 
         line = new Line();
+        startX = source.getBoundsInParent().getWidth() / 2.0;
+        startY = source.getBoundsInParent().getHeight() / 2.0;
+        line.startXProperty().bind( source.layoutXProperty().add(startX));
+        line.startYProperty().bind( source.layoutYProperty().add(startY));
 
-        line.startXProperty().bind( source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 2.0));
-        line.startYProperty().bind( source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 2.0));
-
-        line.endXProperty().bind( target.layoutXProperty().add( target.getBoundsInParent().getWidth() / 2.0));
-        line.endYProperty().bind( target.layoutYProperty().add( target.getBoundsInParent().getHeight() / 2.0));
+        endX = target.getBoundsInParent().getWidth() / 2.0;
+        endY = target.getBoundsInParent().getHeight() / 2.0;
+        line.endXProperty().bind( target.layoutXProperty().add(endX));
+        line.endYProperty().bind( target.layoutYProperty().add(endY));
         line.setStrokeWidth(1.5);
         line.setStrokeLineJoin(StrokeLineJoin.ROUND);
 
+        getChildren().add( line);
+
+    }
+
+    public Track getTrack() {
+        return this.track;
+    }
+    public void setActiveSwitch(Boolean state) {
+        isActiveSwitch = state;
+    }
+    public void setNewStyle() {
+        double x = (startX + endX);
+        double y = (startY + endY) / 2 - 5;
+        if (this.track.isOccupied()) {
+            Text trainText = new Text(x, y, String.valueOf(this.track.getCurrentTrain().getId()));
+            getChildren().add(trainText);
+            line.setStroke(Color.DARKGREEN);
+            getChildren().remove(line);
+            getChildren().add(line);
+        }
         if (!track.isActive()) {
             line.setStrokeDashOffset(5);
         }
-        if (track.isOccupied()) {
-            line.setStroke(Color.DARKGREEN);
-
-        }
-        getChildren().add( line);
-
     }
 
     public Cell getSource() {

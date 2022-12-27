@@ -3,7 +3,7 @@ package nsu.fit.railway.control;
 import nsu.fit.railway.entities.event.EventQueue;
 import nsu.fit.railway.entities.timetable.Timetable;
 import nsu.fit.railway.entities.topology.Topology;
-import nsu.fit.railway.gui.Main;
+import nsu.fit.railway.gui.MainViewController;
 
 import java.time.LocalDateTime;
 import java.util.AbstractMap.SimpleEntry;
@@ -13,12 +13,12 @@ public class ViewController {
     private final Topology topology;
     private final Timetable timetable;
 
-    private final Main gui;
+    private final MainViewController gui;
 
     private EventQueue events;
     private EventProcessor processor;
 
-    public ViewController(Topology topology, Timetable timetable, Main gui) {
+    public ViewController(Topology topology, Timetable timetable, MainViewController gui) {
         this.topology = topology;
         this.timetable = timetable;
         this.gui = gui;
@@ -38,6 +38,6 @@ public class ViewController {
 //            gui.tellUserNoMoreEvents();
         }
             SimpleEntry<LocalDateTime, LocalDateTime> timestamp = processor.processEvent(events.poll());
-//            gui.changeView(topology, timestamp);
+            gui.redrawStep();
     }
 }
