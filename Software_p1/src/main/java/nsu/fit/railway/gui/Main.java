@@ -25,11 +25,14 @@ import static nsu.fit.railway.entities.timetable.Type.PASSENGER;
 public class Main extends Application {
 
     Graph graph;
-
+    //!!Testing data
+    //TODO: link with file input
     TopologyNode testNode1 = new TopologyNode(1, Collections.emptyList(), true, false);
     TopologyNode testNode2 = new TopologyNode(2, Collections.emptyList(), false, true);
+    TopologyNode testNode3 = new TopologyNode(3, Collections.emptyList(), false, false);
     Set<TopologyNode> nodes = new HashSet<>();
     Track testTrack1 = new Track(new TrackInfo(1, 10), Collections.emptyList(), false);
+    Track testTrack2 = new Track(new TrackInfo(1, 10), Collections.emptyList(), false);
     Set<Track> tracks = new HashSet<>();
     Topology topology;
 
@@ -37,9 +40,17 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         nodes.add(testNode1);
         nodes.add(testNode2);
+        nodes.add(testNode3);
+        testTrack1.setStartNode(testNode1);
+        testTrack1.setFinishNode(testNode3);
+        testTrack2.setStartNode(testNode2);
+        testTrack2.setFinishNode(testNode3);
+        tracks.add(testTrack1);
+        tracks.add(testTrack2);
         ArrayList<Type> canServe = new ArrayList<>();
         canServe.add(PASSENGER);
         testTrack1.setCanServe(canServe);
+
         topology = new Topology(nodes, tracks);
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
@@ -75,13 +86,19 @@ public class Main extends Application {
         graph.beginUpdate();
 
 
-        for (TopologyNode cell : topology.getNodes()) {
-            model.addCell(cell);
+//        for (TopologyNode cell : topology.getNodes()) {
+//            model.addCell(cell);
+//        }
+        for (Track track : topology.getTracks()) {
+            model.addCell(track.getStartNode());
+            model.addCell(track.getFinishNode());
+            model.addEdge(track.getStartNode().getId(), track.getFinishNode().getId(), track);
         }
 
-
         //model.addEdge();
-        model.addEdge(1, 2);
+//        model.addEdge(1, 2);
+//        model.addEdge(1, 3);
+//        model.addEdge(2, 3);
         //model.addEdge(2, 3);
         //model.addEdge(2, 4);
         //model.addEdge(3, 4);
