@@ -6,6 +6,35 @@
         <title>Vite App</title>
     </head>
     <body>
+        <style>
+            html,
+            body,
+            #sigma-container {
+              width: 100%;
+              height: 100%;
+              margin: 0;
+              padding: 0;
+              overflow: hidden;
+            }
+            #buttons {
+                position: absolute;
+                right: 1em;
+                top: 1em;
+                display: flex;
+            }
+          </style>
+          <div id="sigma-container"></div>
+          <div id="buttons">
+            <button id="random">
+              <span>Random layout</span>
+            </button>
+            <button id="noverlap">
+                <span>No overlap layout</span>
+            </button>
+            <button id="railway">
+                <span>Custom layout</span>
+            </button>
+            </div>>
         <script type="module" src="/main.js"></script>
     </body>
 </html>
