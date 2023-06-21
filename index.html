@@ -37,7 +37,7 @@
                 cursor: pointer;
                 background-color: #999999;
             }
-            
+
             button :active {
                 background-color: #424242;
             }
@@ -103,6 +103,10 @@
                 cursor: pointer;
                 color: black;
             }
+
+            #startBtn {
+                z-index: 10;
+            }
         </style>
 
         <div class="tabs">
@@ -113,11 +117,8 @@
         <div class="tab-content">
             <div class="tabs__tab active" id="map-tab" data-tab-info>
                 <div id="sigma-container">
-                    <button id="startBtn" class="sim-button">
-                        Start simulation
-                    </button>
+                    <button id="startBtn" class="sim-button">Start simulation</button>
                 </div>
-                
             </div>
             <div class="tabs__tab" id="timetable-tab" data-tab-info>
                 <p>Timetable</p>
