@@ -99,17 +99,19 @@ graph.forEachNode((node) => {
     graph.setNodeAttribute(node, 'y', Math.random());
 });
 
-const renderer = new Sigma(graph, container);
+const renderer = new Sigma(graph, container, {
+    renderEdgeLabels: true,
+});
 graph.on('edgeAttributesUpdated', function ({ type }) {
     renderer.refresh();
     console.log('refresh');
 });
 
 //Симуляция пошагово по кнопке (не робит)
-const startBtn = document.getElementById("startBtn");
+const startBtn = document.getElementById('startBtn');
 //startBtn.onclick = startSim;
-startBtn.addEventListener("click", function () {
-    console.log("btn");
+startBtn.addEventListener('click', function () {
+    console.log('btn');
     let corrState = GetCurrentState();
     DisplayState(corrState);
 });
@@ -119,7 +121,6 @@ startBtn.addEventListener("click", function () {
 //    let corrState = GetCurrentState();
 //    DisplayState(corrState);
 //}, 1000);
-
 
 //
 // Drag'n'drop feature
