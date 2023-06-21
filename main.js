@@ -1,143 +1,172 @@
 import * as PIXI from 'pixi.js';
-import Graph from "graphology";
-import Sigma from "sigma";
-import { animateNodes } from "sigma/utils/animate";
+import Graph, { MultiGraph } from 'graphology';
+import Sigma from 'sigma';
+import { animateNodes } from 'sigma/utils/animate';
 import noverlap from 'graphology-layout-noverlap';
+import testState from './testState.json' assert { type: 'json' };
+import Topology from './topology';
 
-function randomLayout() {
-    // to keep positions scale uniform between layouts, we first calculate positions extents
-    const xExtents = { min: 0, max: 0 };
-    const yExtents = { min: 0, max: 0 };
-    graph.forEachNode((node, attributes) => {
-      xExtents.min = Math.min(attributes.x, xExtents.min);
-      xExtents.max = Math.max(attributes.x, xExtents.max);
-      yExtents.min = Math.min(attributes.y, yExtents.min);
-      yExtents.max = Math.max(attributes.y, yExtents.max);
-    });
-    const randomPositions = {};
-    graph.forEachNode((node) => {
-      // create random positions respecting position extents
-      randomPositions[node] = {
-        x: Math.random() * (xExtents.max - xExtents.min),
-        y: Math.random() * (yExtents.max - yExtents.min)
-      };
-    });
-    // use sigma animation to update new positions
-    animateNodes(graph, randomPositions, {
-      duration: 1000
-    });
+function GetJSON(yourUrl) {
+    var Httpreq = new XMLHttpRequest(); // a new request
+    Httpreq.open('GET', yourUrl, false);
+    Httpreq.send(null);
+    return Httpreq.responseText;
+}
+function GetTopology() {
+    return new Topology(JSON.parse(GetJSON('http://localhost:8080/simulation/next')));
+    //return new Topology(topologyData);
 }
 
-function noverlapLayout() {
-    noverlap.assign(graph);
+GetJSON('http://localhost:8080/topology');
+GetJSON('http://localhost:8080/simulation');
+let topology = GetTopology();
+const nodes = topology.nodes;
+const tracks = topology.tracks;
+
+function GetCurrentState() {
+    let corrState = JSON.parse(GetJSON('http://localhost:8080/simulation/next'));
+    return corrState;
 }
 
-function customLayout() {
-    const xExtents = { min: 0, max: 0 };
-    const yExtents = { min: 0, max: 0 };
-    graph.forEachNode((node, attributes) => {
-      xExtents.min = Math.min(attributes.x, xExtents.min);
-      xExtents.max = Math.max(attributes.x, xExtents.max);
-      yExtents.min = Math.min(attributes.y, yExtents.min);
-      yExtents.max = Math.max(attributes.y, yExtents.max);
-    });
-    const finalPositions = {};
-    let inCnt = 0;
-    let outCnt = 0;
-    function max(x, y) {
-        if (x>y) return x;
-        else return y;
+function CustomizeEdge(edge) {
+    if (graph.getEdgeAttribute(edge, 'train') == 'None') {
+        graph.setEdgeAttribute(edge, 'color', 'black');
+    } else {
+        graph.setEdgeAttribute(edge, 'color', 'red');
     }
-    graph.forEachNode((node, attributes) => {
-        console.log(attributes);
-        if (attributes.isInput) {
-            console.log("input found");
-            finalPositions[node] = {
-                x: xExtents.min,
-                y: (yExtents.max - yExtents.min) + inCnt*50
-            };
-            inCnt++;
-        } else if (attributes.isOutput) {
-            finalPositions[node] = {
-                x: xExtents.max,
-                y: (yExtents.max - yExtents.min) + outCnt*50
-            };
-            outCnt++;
-        } else {
-      // create random positions respecting position extents
-      finalPositions[node] = {
-        x: Math.random() * ((xExtents.max - 20) - (xExtents.min + 20)),
-        y: Math.random() * (max(inCnt, outCnt)*50) + 200
-      };
-    }
-    });
-    // use sigma animation to update new positions
-    animateNodes(graph, finalPositions, {
-      duration: 1000
-    });
 }
 
+function DisplayState(state) {
+    //Reset all tracks to empty
+    graph.forEachEdge((edge, attributes, source, target, sourceAttributes, targetAttributes) => {
+        graph.mergeEdgeAttributes(edge, { train: 'None' });
+    });
+    for (const t of state.trains) {
+        let edge = t.occupiedTrack.id;
+        graph.setEdgeAttribute(edge, 'train', t);
+    }
+    for (const n of state.nodes) {
+        let label = '';
+        if (n.signal != null) {
+            label = label + 'signal: ' + n.signal.currentState;
+        }
+        if (n.aswitch != null) {
+            label = label + 'switch to: ' + n.aswitch.currentTrackTo.id;
+            for (const t of n.aswitch.tracksTo) graph.setEdgeAttribute(t.id, 'color', 'gray');
+            graph.setEdgeAttribute(n.aswitch.currentTrackTo.id, 'color', 'black');
+        }
+        graph.setNodeAttribute(n.id, 'label', label);
+    }
+    graph.edges().forEach((e) => CustomizeEdge(e));
+}
 
-const randomButton = document.getElementById("random");
-const noverlapButton = document.getElementById("noverlap");
-const customButton = document.getElementById("railway");
-randomButton.addEventListener("click", randomLayout);
-noverlapButton.addEventListener("click", noverlapLayout);
-customButton.addEventListener("click", customLayout);
+const container = document.getElementById('sigma-container');
 
-const container = document.getElementById("sigma-container");
-
-import topology from './topology.json' assert {type: 'json'};
-const nodes = topology["nodes"];
-//console.log(nodes.length);
-
-const graph = new Graph();
+//Defining graph nodes and edges
+const graph = new MultiGraph();
 
 for (let i = 0; i < nodes.length; i++) {
-    if (!graph.hasNode(nodes[i].id))
-        graph.addNode(nodes[i].id);
-        graph.mergeNodeAttributes(nodes[i].id, {size: 15, isInput: nodes[i].input, isOutput: nodes[i].output});
-    for (let k = 0; k < nodes[i].associated.length; k++) {
-        if (graph.hasNode(nodes[i].associated[k]) && !graph.areNeighbors(nodes[i].id, nodes[i].associated[k])) {
-            graph.addEdge(nodes[i].id, nodes[i].associated[k]);
-            graph.setEdgeAttribute(nodes[i].id, nodes[i].associated[k], 'size', 5);
-        }
-    }
+    graph.updateNode(nodes[i].id);
+    graph.mergeNodeAttributes(nodes[i].id, {
+        size: 15,
+        label: i,
+        controlElements: nodes[i].controlElements,
+    });
 }
 
-/*for (const node in nodes) {
-    if (!graph.hasNode(node))
-        graph.addNode(node);
-    for (const assoc in node.associated) {
-        if (graph.hasNode(assoc) && !graph.areNeighbors(node, assoc)) {
-            graph.addEdge(node, assoc);
-        }
+for (let i = 0; i < tracks.length; i++) {
+    let curNodes = topology.getAssociatedNodes(tracks[i]);
+    graph.addDirectedEdgeWithKey(tracks[i].id, curNodes.start.id, curNodes.finish.id, {
+        type: 'arrow',
+        label: i,
+        size: 5,
+    });
+}
+
+graph.nodes().forEach((node) => {
+    let inDeg = graph.inDegreeWithoutSelfLoops(node);
+    let outDeg = graph.outDegreeWithoutSelfLoops(node);
+    graph.mergeNodeAttributes(node, { isInput: false, isOutput: false });
+    if (inDeg != 0 && outDeg == 0) {
+        graph.mergeNodeAttributes(node, { isOutput: true });
+    } else if (inDeg == 0 && outDeg != 0) {
+        graph.mergeNodeAttributes(node, { isInput: true });
     }
-}*/
-
-graph.forEachNode(node => {
-    graph.setNodeAttribute(node, 'x', Math.random());
-    graph.setNodeAttribute(node, 'y', Math.random());
-  });
-
-graph.forEachNode(node => {
-    //console.log(node);
 });
 
-graph.forEachEdge(edge => {
-    console.log(edge);
-})
+graph.forEachNode((node) => {
+    graph.setNodeAttribute(node, 'x', Math.random());
+    graph.setNodeAttribute(node, 'y', Math.random());
+});
 
-/*const blueBox = new PIXI.Graphics();
-blueBox.beginFill(0x0000ff);
-blueBox.drawRect(150, 150, 150, 150);
-blueBox.interactive = true;
-blueBox.cursor = 'pointer';
-const onBlueBoxClick = (event) => {
-    blueBox.x = Math.random() * 200;
-    blueBox.y = Math.random() * 200;
-};
-blueBox.on('click', onBlueBoxClick);*/
 const renderer = new Sigma(graph, container);
+graph.on('edgeAttributesUpdated', function ({ type }) {
+    renderer.refresh();
+    console.log('refresh');
+});
 
-//app.stage.addChild(blueBox);
+//Симуляция пошагово по кнопке (не робит)
+const startBtn = document.getElementById("startBtn");
+//startBtn.onclick = startSim;
+startBtn.addEventListener("click", function () {
+    console.log("btn");
+    let corrState = GetCurrentState();
+    DisplayState(corrState);
+});
+
+//Воспроизведение симуляции по времени
+//const interval = setInterval(function () {
+//    let corrState = GetCurrentState();
+//    DisplayState(corrState);
+//}, 1000);
+
+
+//
+// Drag'n'drop feature
+// ~~~~~~~~~~~~~~~~~~~
+//
+
+// State for drag'n'drop
+let draggedNode = null;
+let isDragging = false;
+
+// On mouse down on a node
+//  - we enable the drag mode
+//  - save in the dragged node in the state
+//  - highlight the node
+//  - disable the camera so its state is not updated
+renderer.on('downNode', (e) => {
+    isDragging = true;
+    draggedNode = e.node;
+    graph.setNodeAttribute(draggedNode, 'highlighted', true);
+});
+
+// On mouse move, if the drag mode is enabled, we change the position of the draggedNode
+renderer.getMouseCaptor().on('mousemovebody', (e) => {
+    if (!isDragging || !draggedNode) return;
+
+    // Get new position of node
+    const pos = renderer.viewportToGraph(e);
+
+    graph.setNodeAttribute(draggedNode, 'x', pos.x);
+    graph.setNodeAttribute(draggedNode, 'y', pos.y);
+
+    // Prevent sigma to move camera:
+    e.preventSigmaDefault();
+    e.original.preventDefault();
+    e.original.stopPropagation();
+});
+
+// On mouse up, we reset the autoscale and the dragging mode
+renderer.getMouseCaptor().on('mouseup', () => {
+    if (draggedNode) {
+        graph.removeNodeAttribute(draggedNode, 'highlighted');
+    }
+    isDragging = false;
+    draggedNode = null;
+});
+
+// Disable the autoscale at the first down interaction
+renderer.getMouseCaptor().on('mousedown', () => {
+    if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
+});

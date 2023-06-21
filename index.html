@@ -3,38 +3,142 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite App</title>
+        <title>Railway</title>
     </head>
     <body>
         <style>
             html,
             body,
             #sigma-container {
-              width: 100%;
-              height: 100%;
-              margin: 0;
-              padding: 0;
-              overflow: hidden;
+                width: 100%;
+                height: 1000px;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
             }
-            #buttons {
+            button {
                 position: absolute;
-                right: 1em;
-                top: 1em;
-                display: flex;
+                top: 10%;
+                left: 50%;
+                background-color: #e7e7e7;
+                color: black;
+                border: none;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 8px;
+                transition: 0.2s;
+                cursor: pointer;
             }
-          </style>
-          <div id="sigma-container"></div>
-          <div id="buttons">
-            <button id="random">
-              <span>Random layout</span>
-            </button>
-            <button id="noverlap">
-                <span>No overlap layout</span>
-            </button>
-            <button id="railway">
-                <span>Custom layout</span>
-            </button>
-            </div>>
+
+            button :hover {
+                cursor: pointer;
+                background-color: #999999;
+            }
+            
+            button :active {
+                background-color: #424242;
+            }
+            body {
+                background: rgb(255, 255, 255);
+            }
+
+            [data-tab-info] {
+                display: none;
+            }
+
+            .active[data-tab-info] {
+                display: block;
+            }
+
+            .tab-content {
+                font-size: 30px;
+                font-family: sans-serif;
+                font-weight: bold;
+                color: rgb(82, 75, 75);
+            }
+
+            .tabs {
+                font-size: 20px;
+                color: rgb(255, 255, 255);
+                display: flex;
+                position: relative;
+                margin: 20px 0 0 10px;
+                text-align: left;
+                li {
+                    float: left;
+                    display: block;
+                }
+                label {
+                    display: block;
+                    padding: 14px 21px;
+                    border-radius: 2px 2px 0 0;
+                    font-size: 20px;
+                    font-weight: normal;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    position: relative;
+                    top: 4px;
+                }
+            }
+
+            [id^='tab']:checked + label {
+                top: 0;
+                padding-top: 17px;
+            }
+            [id^='tab']:checked ~ [id^='tab-content'] {
+                display: block;
+            }
+
+            .tabs span {
+                background: rgb(95, 107, 96);
+                padding: 10px;
+                border: 1px solid rgb(255, 255, 255);
+            }
+
+            .tabs span:hover {
+                background: rgb(74, 83, 79);
+                cursor: pointer;
+                color: black;
+            }
+        </style>
+
+        <div class="tabs">
+            <span data-tab-value="#map-tab">Simulation</span>
+            <span data-tab-value="#timetable-tab">Timetable</span>
+        </div>
+
+        <div class="tab-content">
+            <div class="tabs__tab active" id="map-tab" data-tab-info>
+                <div id="sigma-container">
+                    <button id="startBtn" class="sim-button">
+                        Start simulation
+                    </button>
+                </div>
+                
+            </div>
+            <div class="tabs__tab" id="timetable-tab" data-tab-info>
+                <p>Timetable</p>
+            </div>
+        </div>
+
         <script type="module" src="/main.js"></script>
+        <script type="text/javascript">
+            const tabs = document.querySelectorAll('[data-tab-value]');
+            const tabInfos = document.querySelectorAll('[data-tab-info]');
+
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    const target = document.querySelector(tab.dataset.tabValue);
+
+                    tabInfos.forEach((tabInfo) => {
+                        tabInfo.classList.remove('active');
+                    });
+                    target.classList.add('active');
+                });
+            });
+        </script>
     </body>
 </html>
