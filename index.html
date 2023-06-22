@@ -19,8 +19,8 @@
             }
             button {
                 position: relative;
-                top: 10%;
-                left: 30%;
+                /*top: 10%;
+                left: 30%;*/
                 background-color: #e7e7e7;
                 color: black;
                 border: none;
@@ -34,6 +34,15 @@
                 cursor: pointer;
                 z-index: 100;
             }
+            #control-buttons {
+                position: absolute;
+                padding: 20px;
+                z-index: 10;
+                margin: 30px;
+                background-color: rgb(187, 187, 187);
+                border-radius: 5%;
+                top: 10%;
+            }
 
             button :hover {
                 cursor: pointer;
@@ -46,121 +55,44 @@
             body {
                 background: rgb(255, 255, 255);
             }
-
-            [data-tab-info] {
-                display: none;
-            }
-
-            .active[data-tab-info] {
-                display: block;
-            }
-
-            .tab-content {
-                font-size: 30px;
-                font-family: sans-serif;
-                font-weight: bold;
-                color: rgb(82, 75, 75);
-            }
-
-            .tabs {
-                font-size: 20px;
-                color: rgb(255, 255, 255);
-                display: flex;
-                position: relative;
-                margin: 20px 0 0 10px;
-                text-align: left;
-                li {
-                    float: left;
-                    display: block;
-                }
-                label {
-                    display: block;
-                    padding: 14px 21px;
-                    border-radius: 2px 2px 0 0;
-                    font-size: 20px;
-                    font-weight: normal;
-                    text-transform: uppercase;
-                    cursor: pointer;
-                    position: relative;
-                    top: 4px;
-                }
-            }
-
-            [id^='tab']:checked + label {
-                top: 0;
-                padding-top: 17px;
-            }
-            [id^='tab']:checked ~ [id^='tab-content'] {
-                display: block;
-            }
-
-            .tabs span {
-                background: rgb(95, 107, 96);
-                padding: 10px;
-                border: 1px solid rgb(255, 255, 255);
-            }
-
-            .tabs span:hover {
-                background: rgb(74, 83, 79);
-                cursor: pointer;
-                color: black;
-            }
-
-            #startBtn {
-                z-index: 10;
-            }
             #timetable {
                 background-color: rgb(201, 201, 201);
                 position: absolute;
                 left: 70%;
                 width: 600px;
                 height: 1000px;
+                padding: 20px;
+                z-index: 10;
             }
-            table, th, td {
+            table,
+            th,
+            td {
                 border: 1px solid black;
                 border-collapse: collapse;
                 padding: 5px;
             }
+            #timestamp {
+                font-family: monospace;
+                font-size: 30px;
+                position: absolute;
+                margin: 30px;
+                padding: 10px;
+                top: 20px;
+            }
         </style>
-
-        <div class="tabs">
-            <span data-tab-value="#map-tab">Simulation</span>
-            <span data-tab-value="#timetable-tab">Timetable</span>
-        </div>
-
-        <div class="tab-content">
-            <div class="tabs__tab active" id="map-tab" data-tab-info>
-                <div id="sigma-container">
-                    <button id="playBtn" class="sim-button">Play simulation</button>
-                    <button id="stopBtn" class="sim-button">Pause</button>
-                    <button id="stepBtn" class="sim-button">Step</button>
-                </div>
-            </div>
-            <div class="tabs__tab" id="timetable-tab" data-tab-info>
-        
+        <div id="sigma-container">
+            <span id="timestamp">Current time</span>
+            <div id="control-buttons">
+                <button id="playBtn" class="sim-button">Play simulation</button>
+                <button id="stopBtn" class="sim-button">Pause</button>
+                <button id="stepBtn" class="sim-button">Step</button>
             </div>
         </div>
         <div id="timetable">
             <h1>Timetable</h1>
-            <button id='tableBtn'>Upload timetable</button>
             <table id="table"></table>
         </div>
 
         <script type="module" src="/main.js"></script>
-        <script type="text/javascript">
-            const tabs = document.querySelectorAll('[data-tab-value]');
-            const tabInfos = document.querySelectorAll('[data-tab-info]');
-
-            tabs.forEach((tab) => {
-                tab.addEventListener('click', () => {
-                    const target = document.querySelector(tab.dataset.tabValue);
-
-                    tabInfos.forEach((tabInfo) => {
-                        tabInfo.classList.remove('active');
-                    });
-                    target.classList.add('active');
-                });
-            });
-        </script>
     </body>
 </html>

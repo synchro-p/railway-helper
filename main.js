@@ -28,6 +28,13 @@ const topology = GetTopology();
 const nodes = topology.nodes;
 const tracks = topology.tracks;
 
+var timestamp = document.getElementById('timestamp');
+function prettyDateTime(datetime) {
+    return datetime.slice(8, 10) + '/' + datetime.slice(5, 7) + '/' + datetime.slice(0, 4) +
+        '   ' + datetime.slice(11, 19)
+}
+
+
 function GetCurrentState() {
     let corrState = JSON.parse(GetJSON('http://localhost:8080/simulation/next'));
     return corrState;
@@ -80,6 +87,7 @@ function DisplayState(state) {
         }
         graph.setNodeAttribute(n.id, 'label', label);
     }
+    timestamp.textContent = prettyDateTime(state.timestamp);
     graph.edges().forEach((e) => CustomizeEdge(e));
 }
 
@@ -141,16 +149,20 @@ stepBtn.addEventListener('click', function () {
 let interval = null;
 const playBtn = document.getElementById('playBtn');
 playBtn.addEventListener('click', function() {
+    if (interval == null) {
     interval = setInterval(function () {
             let corrState = GetCurrentState();
             DisplayState(corrState);
         }, 1000);
+    }
 });
 //Остановка симуляции по времени
 const stopBtn = document.getElementById('stopBtn');
 stopBtn.addEventListener('click', function() {
-    if (interval != null)
+    if (interval != null) {
         clearInterval(interval);
+        interval = null;
+    }
 });
 
 //РАСПИСАНИЕ
@@ -185,11 +197,8 @@ function constructTable(timetable, selector) {
     }
 }
 
-const tableBtn = document.getElementById('tableBtn');
-tableBtn.addEventListener('click', function() {
-    timetable = JSON.parse(GetJSON('http://localhost:8080/timetable/test-mapping'));
-    constructTable(timetable, 'table');
-});
+constructTable(timetable, 'table');
+
 
 //
 // Drag'n'drop feature
