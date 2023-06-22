@@ -87,7 +87,7 @@ function DisplayState(state) {
         graph.setNodeAttribute(n.id, 'label', label);
     }
     for (const track of state.tracks) {
-        if (track.canServe.length == 0) {
+        if (track.canServe.length == 0 || track.isActive == false) {
             graph.mergeEdgeAttributes(track.id, {label: '!OUT OF ORDER!', color: 'red'});
         }
     }
