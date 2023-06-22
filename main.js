@@ -44,11 +44,12 @@ function CustomizeEdge(edge) {
     if (graph.getEdgeAttribute(edge, 'train') == 'None') {
         if (graph.getEdgeAttribute(edge, 'color') == 'orangered')
             graph.setEdgeAttribute(edge, 'color', 'black');
-        graph.setEdgeAttribute(edge, 'label', edge.slice(0, 4));
+        graph.setEdgeAttribute(edge, 'label', edge);
     } else {
         //graph.setEdgeAttribute(edge, 'color', 'red');
         let train = graph.getEdgeAttribute(edge, 'train');
-        let label = 'Train \nID: ' + train.id.slice(0, 4) + '\nPurpose: ' + train.trainType;
+        //let label = 'Train \nID: ' + train.id.slice(0, 4) + '\nPurpose: ' + train.trainType;
+        let label = 'Train \nID: ' + train.id + '\nPurpose: ' + train.trainType;
         graph.mergeEdgeAttributes(edge, { color: 'orangered', label: label});
     }
 }
@@ -65,9 +66,9 @@ function DisplayState(state) {
     for (const n of state.nodes) {
         let label = '';
         if (graph.getNodeAttribute(n.id, 'isInput'))
-            label = label + 'IN-' + n.id.slice(0, 4);
+            label = label + 'IN-' + n.id;
         if (graph.getNodeAttribute(n.id, 'isOutput'))
-        label = label + 'OUT-' + n.id.slice(0, 4);
+        label = label + 'OUT-' + n.id;
         if (n.signal != null) {
             label = label + 'signal: ' + n.signal.currentState;
             if (n.signal.currentState == 'GO')
@@ -76,7 +77,7 @@ function DisplayState(state) {
             graph.setNodeAttribute(n.id, 'color', 'orangered');
         }
         if (n.aswitch != null) {
-            label = label + 'switch to: ' + n.aswitch.currentTrackTo.id.slice(0, 4);
+            label = label + 'switch to: ' + n.aswitch.currentTrackTo.id;
             console.log('switch');
             for (const t of n.aswitch.tracksTo) 
             {
@@ -108,7 +109,7 @@ for (let i = 0; i < tracks.length; i++) {
     let curNodes = topology.getAssociatedNodes(tracks[i]);
     graph.addDirectedEdgeWithKey(tracks[i].id, curNodes.start.id, curNodes.finish.id, {
         type: 'arrow',
-        label: tracks[i].id.slice(0, 4),
+        label: 'id: ' + tracks[i].id,
         size: 5,
         color: 'black',
     });
@@ -119,10 +120,10 @@ graph.nodes().forEach((node) => {
     let outDeg = graph.outDegreeWithoutSelfLoops(node);
     graph.mergeNodeAttributes(node, { isInput: false, isOutput: false });
     if (inDeg != 0 && outDeg == 0) {
-        graph.mergeNodeAttributes(node, { isOutput: true, label: 'OUT-' + node.slice(0, 4)});
+        graph.mergeNodeAttributes(node, { isOutput: true, label: 'OUT-' + node});
 
     } else if (inDeg == 0 && outDeg != 0) {
-        graph.mergeNodeAttributes(node, { isInput: true, label: 'IN-' + node.slice(0, 4) });
+        graph.mergeNodeAttributes(node, { isInput: true, label: 'IN-' + node});
     }
 });
 
@@ -136,7 +137,6 @@ const renderer = new Sigma(graph, container, {
 });
 graph.on('edgeAttributesUpdated', function ({ type }) {
     renderer.refresh();
-    console.log('refresh');
 });
 
 //Симуляция пошагово по кнопке
@@ -181,7 +181,7 @@ function constructTable(timetable, selector) {
     for (const event of timetable) {
         let row = table.insertRow(-1);
         var cell1 = row.insertCell();
-        cell1.textContent = event.train.id.slice(0, 4);
+        cell1.textContent = event.train.id;
 
         var cell2 = row.insertCell();
         cell2.textContent = prettyDateTime(event.arrivalTime);
@@ -190,10 +190,10 @@ function constructTable(timetable, selector) {
         cell3.textContent = event.stationingTime;
 
         var cell4 = row.insertCell();
-        cell4.textContent = "IN-" + event.inputNode.id.slice(0, 4);
+        cell4.textContent = "IN-" + event.inputNode.id;
 
         var cell5 = row.insertCell();
-        cell5.textContent = "OUT-" + event.endNode.id.slice(0, 4);
+        cell5.textContent = "OUT-" + event.endNode.id;
     }
 }
 
