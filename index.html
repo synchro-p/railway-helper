@@ -10,16 +10,17 @@
             html,
             body,
             #sigma-container {
-                width: 100%;
+                width: 80%;
                 height: 1000px;
-                margin: 0;
+                margin-left: 0;
                 padding: 0;
+                float: left;
                 overflow: hidden;
             }
             button {
-                position: absolute;
+                position: relative;
                 top: 10%;
-                left: 50%;
+                left: 30%;
                 background-color: #e7e7e7;
                 color: black;
                 border: none;
@@ -108,6 +109,18 @@
             #startBtn {
                 z-index: 10;
             }
+            #timetable {
+                background-color: rgb(201, 201, 201);
+                position: absolute;
+                left: 70%;
+                width: 600px;
+                height: 1000px;
+            }
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 5px;
+            }
         </style>
 
         <div class="tabs">
@@ -118,12 +131,19 @@
         <div class="tab-content">
             <div class="tabs__tab active" id="map-tab" data-tab-info>
                 <div id="sigma-container">
-                    <button id="startBtn" class="sim-button">Start simulation</button>
+                    <button id="playBtn" class="sim-button">Play simulation</button>
+                    <button id="stopBtn" class="sim-button">Pause</button>
+                    <button id="stepBtn" class="sim-button">Step</button>
                 </div>
             </div>
             <div class="tabs__tab" id="timetable-tab" data-tab-info>
-                <p>Timetable</p>
+        
             </div>
+        </div>
+        <div id="timetable">
+            <h1>Timetable</h1>
+            <button id='tableBtn'>Upload timetable</button>
+            <table id="table"></table>
         </div>
 
         <script type="module" src="/main.js"></script>

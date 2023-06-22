@@ -6,20 +6,25 @@ import noverlap from 'graphology-layout-noverlap';
 import testState from './testState.json' assert { type: 'json' };
 import Topology from './topology';
 
+import { $, jQuery } from 'jquery';
+//const $ = require( "jquery" );
+//window.$ = $;
+//window.jQuery = jQuery;
+
 function GetJSON(yourUrl) {
     var Httpreq = new XMLHttpRequest(); // a new request
     Httpreq.open('GET', yourUrl, false);
     Httpreq.send(null);
     return Httpreq.responseText;
 }
+
 function GetTopology() {
     return new Topology(JSON.parse(GetJSON('http://localhost:8080/simulation/next')));
-    //return new Topology(topologyData);
 }
 
 GetJSON('http://localhost:8080/topology');
 GetJSON('http://localhost:8080/simulation');
-let topology = GetTopology();
+const topology = GetTopology();
 const nodes = topology.nodes;
 const tracks = topology.tracks;
 
@@ -30,9 +35,14 @@ function GetCurrentState() {
 
 function CustomizeEdge(edge) {
     if (graph.getEdgeAttribute(edge, 'train') == 'None') {
-        graph.setEdgeAttribute(edge, 'color', 'black');
+        if (graph.getEdgeAttribute(edge, 'color') == 'orangered')
+            graph.setEdgeAttribute(edge, 'color', 'black');
+        graph.setEdgeAttribute(edge, 'label', edge.slice(0, 4));
     } else {
-        graph.setEdgeAttribute(edge, 'color', 'red');
+        //graph.setEdgeAttribute(edge, 'color', 'red');
+        let train = graph.getEdgeAttribute(edge, 'train');
+        let label = 'OCCUPIED \nID: ' + train.id.slice(0, 4) + '\nPurpose: ' + train.trainType;
+        graph.mergeEdgeAttributes(edge, { color: 'orangered', label: label});
     }
 }
 
@@ -47,12 +57,25 @@ function DisplayState(state) {
     }
     for (const n of state.nodes) {
         let label = '';
+        if (graph.getNodeAttribute(n.id, 'isInput'))
+            label = label + 'IN-' + n.id.slice(0, 4);
+        if (graph.getNodeAttribute(n.id, 'isOutput'))
+        label = label + 'OUT-' + n.id.slice(0, 4);
         if (n.signal != null) {
             label = label + 'signal: ' + n.signal.currentState;
+            if (n.signal.currentState == 'GO')
+                graph.setNodeAttribute(n.id, 'color', 'lightgreen');
+            else
+            graph.setNodeAttribute(n.id, 'color', 'orangered');
         }
         if (n.aswitch != null) {
-            label = label + 'switch to: ' + n.aswitch.currentTrackTo.id;
-            for (const t of n.aswitch.tracksTo) graph.setEdgeAttribute(t.id, 'color', 'gray');
+            label = label + 'switch to: ' + n.aswitch.currentTrackTo.id.slice(0, 4);
+            console.log('switch');
+            for (const t of n.aswitch.tracksTo) 
+            {
+                console.log(t.id);
+                graph.setEdgeAttribute(t.id, 'color', 'lightgray');
+            }
             graph.setEdgeAttribute(n.aswitch.currentTrackTo.id, 'color', 'black');
         }
         graph.setNodeAttribute(n.id, 'label', label);
@@ -68,8 +91,7 @@ const graph = new MultiGraph();
 for (let i = 0; i < nodes.length; i++) {
     graph.updateNode(nodes[i].id);
     graph.mergeNodeAttributes(nodes[i].id, {
-        size: 15,
-        label: i,
+        size: 10,
         controlElements: nodes[i].controlElements,
     });
 }
@@ -78,8 +100,9 @@ for (let i = 0; i < tracks.length; i++) {
     let curNodes = topology.getAssociatedNodes(tracks[i]);
     graph.addDirectedEdgeWithKey(tracks[i].id, curNodes.start.id, curNodes.finish.id, {
         type: 'arrow',
-        label: i,
+        label: tracks[i].id.slice(0, 4),
         size: 5,
+        color: 'black',
     });
 }
 
@@ -88,9 +111,10 @@ graph.nodes().forEach((node) => {
     let outDeg = graph.outDegreeWithoutSelfLoops(node);
     graph.mergeNodeAttributes(node, { isInput: false, isOutput: false });
     if (inDeg != 0 && outDeg == 0) {
-        graph.mergeNodeAttributes(node, { isOutput: true });
+        graph.mergeNodeAttributes(node, { isOutput: true, label: 'OUT-' + node.slice(0, 4)});
+
     } else if (inDeg == 0 && outDeg != 0) {
-        graph.mergeNodeAttributes(node, { isInput: true });
+        graph.mergeNodeAttributes(node, { isInput: true, label: 'IN-' + node.slice(0, 4) });
     }
 });
 
@@ -107,20 +131,65 @@ graph.on('edgeAttributesUpdated', function ({ type }) {
     console.log('refresh');
 });
 
-//Симуляция пошагово по кнопке (не робит)
-const startBtn = document.getElementById('startBtn');
-//startBtn.onclick = startSim;
-startBtn.addEventListener('click', function () {
-    console.log('btn');
+//Симуляция пошагово по кнопке
+const stepBtn = document.getElementById('stepBtn');
+stepBtn.addEventListener('click', function () {
     let corrState = GetCurrentState();
     DisplayState(corrState);
 });
+//Старт симуляции по времени 
+let interval = null;
+const playBtn = document.getElementById('playBtn');
+playBtn.addEventListener('click', function() {
+    interval = setInterval(function () {
+            let corrState = GetCurrentState();
+            DisplayState(corrState);
+        }, 1000);
+});
+//Остановка симуляции по времени
+const stopBtn = document.getElementById('stopBtn');
+stopBtn.addEventListener('click', function() {
+    if (interval != null)
+        clearInterval(interval);
+});
 
-//Воспроизведение симуляции по времени
-//const interval = setInterval(function () {
-//    let corrState = GetCurrentState();
-//    DisplayState(corrState);
-//}, 1000);
+//РАСПИСАНИЕ
+GetJSON('http://localhost:8080/timetable');
+let timetable = JSON.parse(GetJSON('http://localhost:8080/timetable/test-mapping'));
+var table = document.getElementById('table');
+
+function constructTable(timetable, selector) {
+    const cols = ['Train ID', 'Arrival time', 'Stationing time', 'From', 'To'];
+    var headerRow = table.insertRow(0);
+    for (const c of cols) {
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = c;
+        headerRow.appendChild(headerCell);
+    }
+    for (const event of timetable) {
+        let row = table.insertRow(-1);
+        var cell1 = row.insertCell();
+        cell1.textContent = event.train.id.slice(0, 4);
+
+        var cell2 = row.insertCell();
+        cell2.textContent = event.arrivalTime;
+
+        var cell3 = row.insertCell();
+        cell3.textContent = event.stationingTime;
+
+        var cell4 = row.insertCell();
+        cell4.textContent = "IN-" + event.inputNode.id.slice(0, 4);
+
+        var cell5 = row.insertCell();
+        cell5.textContent = "OUT-" + event.endNode.id.slice(0, 4);
+    }
+}
+
+const tableBtn = document.getElementById('tableBtn');
+tableBtn.addEventListener('click', function() {
+    timetable = JSON.parse(GetJSON('http://localhost:8080/timetable/test-mapping'));
+    constructTable(timetable, 'table');
+});
 
 //
 // Drag'n'drop feature
