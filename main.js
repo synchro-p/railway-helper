@@ -78,15 +78,18 @@ function DisplayState(state) {
         }
         if (n.aswitch != null) {
             label = label + 'switch to: ' + n.aswitch.currentTrackTo.id;
-            console.log('switch');
             for (const t of n.aswitch.tracksTo) 
             {
-                console.log(t.id);
                 graph.setEdgeAttribute(t.id, 'color', 'lightgray');
             }
             graph.setEdgeAttribute(n.aswitch.currentTrackTo.id, 'color', 'black');
         }
         graph.setNodeAttribute(n.id, 'label', label);
+    }
+    for (const track of state.tracks) {
+        if (track.canServe.length == 0) {
+            graph.mergeEdgeAttributes(track.id, {label: '!OUT OF ORDER!', color: 'red'});
+        }
     }
     timestamp.textContent = prettyDateTime(state.timestamp);
     graph.edges().forEach((e) => CustomizeEdge(e));
