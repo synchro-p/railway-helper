@@ -48,7 +48,7 @@ function CustomizeEdge(edge) {
     } else {
         //graph.setEdgeAttribute(edge, 'color', 'red');
         let train = graph.getEdgeAttribute(edge, 'train');
-        let label = 'OCCUPIED \nID: ' + train.id.slice(0, 4) + '\nPurpose: ' + train.trainType;
+        let label = 'Train \nID: ' + train.id.slice(0, 4) + '\nPurpose: ' + train.trainType;
         graph.mergeEdgeAttributes(edge, { color: 'orangered', label: label});
     }
 }
@@ -184,7 +184,7 @@ function constructTable(timetable, selector) {
         cell1.textContent = event.train.id.slice(0, 4);
 
         var cell2 = row.insertCell();
-        cell2.textContent = event.arrivalTime;
+        cell2.textContent = prettyDateTime(event.arrivalTime);
 
         var cell3 = row.insertCell();
         cell3.textContent = event.stationingTime;
